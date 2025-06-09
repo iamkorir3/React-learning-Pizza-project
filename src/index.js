@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDom from "react-dom/client";
+import "./index.css";
 
 const pizzaData = [
   {
@@ -48,23 +49,90 @@ const pizzaData = [
 
 function App() {
   return (
-    <div>
-      <h1>Hello React</h1>
-      <Pizza />
-      <Pizza />
-      <Pizza />
+    <div className="container">
+      <Header />
+      <Menu />
+      <Footer />
     </div>
   );
 }
-function Pizza() {
+
+const Header = () => {
   return (
-    <div>
-      <img src="pizzas/spinaci.jpg" alt="Pizza img" />
-      <h2>Pizza Spinaci</h2>
-      <p>Tomato, mozarella, spinach, and ricotta cheese</p>
-    </div>
+    <header className="header">
+      <h1>Fast React Pizza Co.</h1>
+    </header>
+  );
+};
+
+const Menu = () => {
+  const pizzas = pizzaData;
+  const numPizzas = pizzas.length;
+
+  return (
+    <main className="menu">
+      <h2>Our Menu</h2>
+
+      {numPizzas > 0 ? (
+        <ul className="pizzas">
+          {pizzaData.map((Piza) => (
+            <Pizza PizzaObj={Piza} key={Piza.name} />
+          ))}
+        </ul>
+      ) : (
+        <p>We are still working on our menu</p>
+      )}
+      {/* <Pizza
+        name="Pizza Spinaci"
+        ingredient="Tomato, mozarella, spinach, and ricotta cheese"
+        photoName="pizzas/spinaci.jpg"
+        price={10}
+      />
+      <Pizza
+        name="Pizza Funghi"
+        ingredient="Tomato and ricotta cheese"
+        photoName="pizzas/funghi.jpg"
+        price={12}
+      /> */}
+    </main>
+  );
+};
+
+function Pizza(props) {
+  return (
+    <li className="pizza">
+      <img src={props.PizzaObj.photoName} alt={props.PizzaObj.name} />
+      <div>
+        <h3>{props.PizzaObj.name}</h3>
+        <p>{props.PizzaObj.ingredient}</p>
+      </div>
+    </li>
   );
 }
+
+const Footer = () => {
+  const hour = new Date().getHours();
+  const openHour = 12;
+  const closeHour = 23;
+  const isOpen = hour >= openHour && hour <= closeHour;
+  console.log(isOpen);
+
+  // if (hour >= 12 && hour <= closeHour) alert("We're  Currently open");
+  // else alert("we are closed");
+
+  return (
+    <footer className="footer">
+      {isOpen && (
+        <div>
+          <p>
+            We are open until {closeHour}:00, Come visit us or order online!{" "}
+          </p>
+          <button className="btn">Order</button>
+        </div>
+      )}
+    </footer>
+  );
+};
 
 const root = ReactDom.createRoot(document.getElementById("root"));
 root.render(<App />);
